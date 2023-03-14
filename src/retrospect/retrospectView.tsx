@@ -4,6 +4,7 @@ export const RetrospectView: FunctionComponent = () => {
   const [retrospectList, setRetrospectList] = useState<RetrospectiveInstance[]>([])
 
   const getAllRetrospectiveInstances = async () => {
+    // const data = await fetch("http://10.10.31.182:8080/retro", { method: "GET" }).then((res) => res.json())
     const data: RetrospectiveInstance[] = await Promise.resolve([
       {
         retrospectiveInstanceIdentifier: "14f255c4-eddd-433d-b316-fdd67093503a",

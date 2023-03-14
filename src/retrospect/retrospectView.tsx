@@ -8,25 +8,18 @@ export const RetrospectView: FunctionComponent = () => {
 
   const getAllRetrospectiveInstances = async () => {
     // const data = await fetch("http://10.10.31.182:8080/retro", { method: "GET" }).then((res) => res.json())
-    const session = await Platform.builder().withInterceptors( i => i.interceptPattern('*', async (input, ctx) => {
-      const json = GatewayRequest.from(input, ctx)
-      return fetch("http://localhost:5295/retro", { method: "POST", body: JSON.stringify(json) })
-      .then((res) => res.json())
-    }))
-    .build()
+    const session = await Platform.builder()
+      .withInterceptors((i) =>
+        i.interceptPattern("*", async (input, ctx) => {
+          const json = GatewayRequest.from(input, ctx)
+          return fetch("http://localhost:5295/retro", { method: "POST", body: JSON.stringify(json) }).then((res) => res.json())
+        })
+      )
+      .build()
 
-    const utilisationSession = session
-    .asSolution(randomUUID(), ActorInScene.AGENT_IN_PRIVATE)
+    const caller = session.asSolution("test").withDataTenant("lol").withTransactionId("id").withLocale("en-GB")
 
-    const caller = utilisationSession
-    .withDataTenant(randomUUID())
-    .withTransactionId(randomUUID())
-    .withLocale('en-GB')
-
-
-
-
-    const ret = await caller.request(NewRetrospective.with({name: "Hackathon-March"}))
+    const ret = await caller.request(NewRetrospective.with({ name: "Hackathon-March" }))
     console.log(ret)
     const data: RetrospectiveInstance[] = await Promise.resolve([
       {
